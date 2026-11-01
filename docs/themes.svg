@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="514" viewBox="0 0 1000 514" role="img" aria-label="All twelve status bar themes">
+  <rect width="1000" height="514" fill="#000000"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+
+    <text x="16" y="42" fill="#7f8ea3" font-size="11.5" letter-spacing="1">AMOLED CYAN</text>
+    <rect x="190" y="22" width="794" height="30" fill="#04161b"/>
+    <rect x="190" y="22" width="794" height="1" fill="#00e5ff" opacity="0.5"/>
+    <text x="206" y="42" font-size="13.5" fill="#f2f7ff"><tspan fill="#00e5ff">⚡ 86%</tspan><tspan fill="#5ad8ff"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan></text>
+
+    <text x="16" y="82" fill="#7f8ea3" font-size="11.5" letter-spacing="1">MATRIX</text>
+    <rect x="190" y="62" width="794" height="30" fill="#04160c"/>
+    <rect x="190" y="62" width="794" height="1" fill="#00e676" opacity="0.5"/>
+    <text x="206" y="82" font-size="13.5" fill="#f2f7ff"><tspan fill="#00e676">⚡ 86%</tspan><tspan fill="#57e39a"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan></text>
+
+    <text x="16" y="122" fill="#7f8ea3" font-size="11.5" letter-spacing="1">MATRIX · HACKER</text>
+    <rect x="190" y="102" width="794" height="30" fill="#02120a"/>
+    <rect x="190" y="102" width="794" height="1" fill="#00ff6a" opacity="0.5"/>
+    <text x="206" y="122" font-size="13.5" fill="#f2f7ff"><tspan fill="#00ff6a">⚡ 86%</tspan><tspan fill="#0aff9d"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan><tspan fill="#00ff6a"> ▌</tspan></text>
+
+    <text x="16" y="162" fill="#7f8ea3" font-size="11.5" letter-spacing="1">NEON PINK</text>
+    <rect x="190" y="142" width="794" height="30" fill="#170510"/>
+    <rect x="190" y="142" width="794" height="1" fill="#ff2d95" opacity="0.5"/>
+    <text x="206" y="162" font-size="13.5" fill="#f2f7ff"><tspan fill="#ff2d95">⚡ 86%</tspan><tspan fill="#ff7ab8"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan></text>
+
+    <text x="16" y="202" fill="#7f8ea3" font-size="11.5" letter-spacing="1">ULTRAVIOLET</text>
+    <rect x="190" y="182" width="794" height="30" fill="#100518"/>
+    <rect x="190" y="182" width="794" height="1" fill="#b026ff" opacity="0.5"/>
+    <text x="206" y="202" font-size="13.5" fill="#f2f7ff"><tspan fill="#b026ff">⚡ 86%</tspan><tspan fill="#c777ff"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan></text>
+
+    <text x="16" y="242" fill="#7f8ea3" font-size="11.5" letter-spacing="1">SOLAR</text>
+    <rect x="190" y="222" width="794" height="30" fill="#150f03"/>
+    <rect x="190" y="222" width="794" height="1" fill="#ffb300" opacity="0.5"/>
+    <text x="206" y="242" font-size="13.5" fill="#f2f7ff"><tspan fill="#ffb300">⚡ 86%</tspan><tspan fill="#ffcf66"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan></text>
+
+    <text x="16" y="282" fill="#7f8ea3" font-size="11.5" letter-spacing="1">ICE</text>
+    <rect x="190" y="262" width="794" height="30" fill="#05111a"/>
+    <rect x="190" y="262" width="794" height="1" fill="#8ad8ff" opacity="0.5"/>
+    <text x="206" y="282" font-size="13.5" fill="#f2f7ff"><tspan fill="#8ad8ff">⚡ 86%</tspan><tspan fill="#c7ecff"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan></text>
+
+    <text x="16" y="322" fill="#7f8ea3" font-size="11.5" letter-spacing="1">BLOOD</text>
+    <rect x="190" y="302" width="794" height="30" fill="#150306"/>
+    <rect x="190" y="302" width="794" height="1" fill="#ff1744" opacity="0.5"/>
+    <text x="206" y="322" font-size="13.5" fill="#f2f7ff"><tspan fill="#ff1744">⚡ 86%</tspan><tspan fill="#ff6b86"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan></text>
+
+    <text x="16" y="362" fill="#7f8ea3" font-size="11.5" letter-spacing="1">CYBERPUNK</text>
+    <rect x="190" y="342" width="794" height="30" fill="#14120a"/>
+    <rect x="190" y="342" width="794" height="1" fill="#fcee0a" opacity="0.5"/>
+    <text x="206" y="362" font-size="13.5" fill="#f2f7ff"><tspan fill="#fcee0a">⚡ 86%</tspan><tspan fill="#ff2d95"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan><tspan fill="#fcee0a"> ▌</tspan></text>
+
+    <text x="16" y="402" fill="#7f8ea3" font-size="11.5" letter-spacing="1">CYBERWAR</text>
+    <rect x="190" y="382" width="794" height="30" fill="#140606"/>
+    <rect x="190" y="382" width="794" height="1" fill="#ff2b2b" opacity="0.5"/>
+    <text x="206" y="402" font-size="13.5" fill="#f2f7ff"><tspan fill="#ff2b2b">⚡ 86%</tspan><tspan fill="#39ff14"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan><tspan fill="#ff2b2b"> ▌</tspan></text>
+
+    <text x="16" y="442" fill="#7f8ea3" font-size="11.5" letter-spacing="1">SUPER BLACK</text>
+    <rect x="190" y="422" width="794" height="30" fill="#000000" stroke="#ffffff" stroke-opacity="0.14"/>
+    <rect x="190" y="422" width="794" height="1" fill="#ffffff" opacity="0.5"/>
+    <text x="206" y="442" font-size="13.5" fill="#f2f7ff"><tspan fill="#ffffff">⚡ 86%</tspan><tspan fill="#9aa4b2"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan></text>
+
+    <text x="16" y="482" fill="#7f8ea3" font-size="11.5" letter-spacing="1">DEEPSEEK</text>
+    <rect x="190" y="462" width="794" height="30" fill="#0b1226"/>
+    <rect x="190" y="462" width="794" height="1" fill="#4d6bfe" opacity="0.6"/>
+    <text x="206" y="482" font-size="13.5" fill="#f2f7ff"><tspan fill="#4d6bfe">⚡ 86%</tspan><tspan fill="#679efe"> ▰▰▰▰▱</tspan><tspan fill="#96aabe"> · 💚 <tspan fill="#00e676">−$0.31</tspan> · 🪟 42% · 💰 $0.04 · ⏱ 4m</tspan></text>
+  </g>
+</svg>

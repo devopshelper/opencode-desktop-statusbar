@@ -1,0 +1,21 @@
+{
+  "name": "desktop-statusbar",
+  "version": "1.0.0",
+  "description": "Live session telemetry status bar for the OpenCode desktop app",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devopshelper/opencode-desktop-statusbar.git"
+  },
+  "keywords": ["opencode", "plugin", "status-bar", "telemetry", "gui"],
+  "type": "module",
+  "exports": {
+    "./gui-experimental": "./dist/gui-experimental.cjs"
+  },
+  "devDependencies": {
+    "@opencode/plugin": "latest",
+    "vite": "^7.0.0",
+    "vite-plugin-solid": "^2.11.0",
+    "solid-js": "^1.9.0"
+  }
+}

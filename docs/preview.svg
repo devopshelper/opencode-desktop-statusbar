@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="330" viewBox="0 0 1000 330" role="img" aria-label="OpenCode desktop status bar with hover telemetry card">
+  <defs>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="2.2" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <clipPath id="barclip"><rect x="0" y="262" width="1000" height="46"/></clipPath>
+  </defs>
+
+  <rect width="1000" height="330" fill="#000000"/>
+  <rect x="0" y="262" width="1000" height="46" fill="#00e5ff" opacity="0.10" filter="url(#soft)" clip-path="url(#barclip)"/>
+
+  <!-- ============ hover card ============ -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <rect x="30" y="20" width="392" height="220" rx="12" fill="#000000" stroke="#00e5ff" stroke-opacity="0.30"/>
+    <text x="50" y="46" fill="#7f8ea3" font-size="11" letter-spacing="1.4">SESSION</text>
+    <text x="402" y="46" fill="#7f8ea3" font-size="11" letter-spacing="1.4" text-anchor="end">📌 PINNED</text>
+
+    <text x="50" y="72" fill="#96aabe" font-size="12.5">in / out</text>
+    <text x="402" y="72" fill="#ffffff" font-size="12.5" text-anchor="end">↑8.1k  ↓1.2k</text>
+
+    <text x="50" y="91" fill="#96aabe" font-size="12.5">cache write</text>
+    <text x="402" y="91" fill="#ffffff" font-size="12.5" text-anchor="end">✍️ 2.1k</text>
+
+    <text x="50" y="110" fill="#96aabe" font-size="12.5">reasoning</text>
+    <text x="402" y="110" fill="#ffffff" font-size="12.5" text-anchor="end">🧠 640</text>
+
+    <text x="50" y="129" fill="#96aabe" font-size="12.5">cache hit</text>
+    <text x="402" y="129" fill="#00e676" font-size="12.5" text-anchor="end">86%   −$0.31 saved</text>
+
+    <text x="50" y="148" fill="#96aabe" font-size="12.5">context</text>
+    <text x="402" y="148" fill="#ffffff" font-size="12.5" text-anchor="end">84.1k / 200k   42%</text>
+
+    <text x="50" y="167" fill="#96aabe" font-size="12.5">throughput</text>
+    <text x="402" y="167" fill="#00e5ff" font-size="12.5" text-anchor="end">47 tok/s   ⏳1 queued</text>
+
+    <text x="50" y="186" fill="#96aabe" font-size="12.5">total</text>
+    <text x="402" y="186" fill="#ffffff" font-size="12.5" text-anchor="end">402.3k tokens   $0.0431</text>
+  </g>
+
+  <polyline fill="none" stroke="#00e5ff" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" filter="url(#glow)"
+    points="50,216 62,208 74,212 86,200 98,196 110,206 122,202 134,210 146,198 158,194 170,204 182,200 194,208 206,202 218,196 230,190 242,198 254,192 266,200 278,194 290,202 302,196 314,204 326,198 338,208 350,202 362,210 374,204 386,198 402,196"/>
+  <line x1="50" y1="219" x2="402" y2="219" stroke="#ffffff" stroke-opacity="0.10"/>
+
+  <g>
+    <circle cx="60" cy="232" r="6" fill="#00e5ff"/>
+    <circle cx="80" cy="232" r="6" fill="#00e676"/>
+    <circle cx="100" cy="232" r="6" fill="#00ff6a"/>
+    <circle cx="120" cy="232" r="6" fill="#ff2d95"/>
+    <circle cx="140" cy="232" r="6" fill="#b026ff"/>
+    <circle cx="160" cy="232" r="6" fill="#ffb300"/>
+    <circle cx="180" cy="232" r="6" fill="#8ad8ff"/>
+    <circle cx="200" cy="232" r="6" fill="#ff1744"/>
+    <circle cx="220" cy="232" r="6" fill="#fcee0a"/>
+    <circle cx="240" cy="232" r="6" fill="#ff2b2b"/>
+    <circle cx="260" cy="232" r="6" fill="#ffffff"/>
+    <circle cx="60" cy="232" r="8" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+  </g>
+
+  <!-- ============ status bar ============ -->
+  <rect x="0" y="262" width="1000" height="46" fill="#000000"/>
+  <rect x="0" y="262" width="1000" height="1" fill="#00e5ff" opacity="0.45"/>
+
+  <text x="20" y="292" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" fill="#f2f7ff">
+    <tspan fill="#00e5ff" filter="url(#glow)">✻</tspan>
+    <tspan> 🐋 deepseek/deepseek-flash · </tspan>
+    <tspan fill="#7f8ea3">◌ in the ether</tspan>
+    <tspan fill="#00e5ff"> Zzzz</tspan>
+  </text>
+
+  <g filter="url(#glow)">
+    <circle cx="512" cy="283" r="3.2" fill="#f8fafc"/>
+    <circle cx="532" cy="292" r="2.6" fill="#5ad8ff"/>
+    <circle cx="552" cy="283" r="3.2" fill="#f8fafc"/>
+    <circle cx="572" cy="292" r="2.6" fill="#5ad8ff"/>
+    <circle cx="592" cy="283" r="3.2" fill="#f8fafc"/>
+    <circle cx="612" cy="292" r="2.6" fill="#5ad8ff"/>
+    <circle cx="632" cy="283" r="3.2" fill="#f8fafc"/>
+    <circle cx="652" cy="292" r="2.6" fill="#5ad8ff"/>
+  </g>
+
+  <text x="980" y="292" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13.5" text-anchor="end">
+    <tspan fill="#00e5ff" font-weight="600">⚡ 86%</tspan>
+    <tspan fill="#5ad8ff"> ▰▰▰▰▱</tspan>
+    <tspan fill="#96aabe"> · 💰 $0.04</tspan>
+    <tspan fill="#96aabe"> · 📦 402k</tspan>
+    <tspan fill="#96aabe"> · ⏱ 4m</tspan>
+  </text>
+</svg>
