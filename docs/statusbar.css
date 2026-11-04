@@ -1,0 +1,545 @@
+/* ============================================================================
+   OpenCode Desktop Status Bar — portable stylesheet
+   ----------------------------------------------------------------------------
+   Framework-agnostic. No Solid, no preprocessor, no build step. Drop this in
+   any DOM host and drive it with attributes:
+
+     <div data-sb
+          data-sb-theme="cyan"        <!-- see the palette block at the bottom -->
+          data-sb-state="work"        <!-- idle | work  (+ data-sb-tool on the flow) -->
+          data-sb-lite>               <!-- FX off: no full-surface motion -->
+
+   Everything chromatic flows through four custom properties, so a theme is a
+   four-line patch and every glow keyframe recolors for free.
+   ========================================================================= */
+
+/* ---------------------------------------------------------------- tokens -- */
+
+[data-sb] {
+  /* Chromatic (per theme — overridden by [data-sb-theme="…"] below) */
+  --sb-glow: 0, 229, 255;      /* rgb TRIPLE, no rgb() wrapper — spliced into rgba() */
+  --sb-accent: #00e5ff;        /* solid: glyphs, sparkline, cursor, Zzzz */
+  --sb-accent2: #5ad8ff;       /* second particle lane, whale wash detail */
+  --sb-wash: #04161b;          /* FLAT full-bar tint. Never a gradient. */
+
+  /* Rhythm — one breath is one thought. Do not add easing variety here. */
+  --sb-breath-work: 3.75s;     /* 16 breaths/min, alert */
+  --sb-breath-idle: 5s;        /* 12 breaths/min, resting */
+  --sb-ease-breath: cubic-bezier(0.37, 0, 0.63, 1); /* symmetric in/out */
+
+  /* Type */
+  --sb-fs: 12px;
+  --sb-fs-status: 12.5px;      /* the phrase is the only text allowed above 12 */
+  --sb-fs-meta: 11px;
+  --sb-text: #f2f7ff;
+  --sb-fs-family: inherit;     /* never set a font — inherit the host's UI face */
+
+  /* Layout */
+  --sb-gap-col: 18px;
+  --sb-gap-row: 3px;
+  --sb-pad-x: 16px;
+  --sb-pad-y: 6px;             /* host-adjustable 2–18px */
+
+  /* Particle lane */
+  --sb-flow-w: 128px;
+  --sb-flow-h: 17px;
+  --sb-flow-dur: 1.4s;         /* driven by tok/s — see STYLE.md §7 */
+}
+
+/* ----------------------------------------------------------------- shell -- */
+
+[data-sb] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: var(--sb-gap-col);
+  row-gap: var(--sb-gap-row);
+  width: 100%;
+  padding: var(--sb-pad-y) var(--sb-pad-x);
+  font-family: var(--sb-fs-family);
+  font-size: var(--sb-fs);
+  letter-spacing: 0.3px;
+  color: var(--sb-text);
+  background: #000000;                        /* true black, AMOLED-first */
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 30px rgba(var(--sb-glow), 0.10);
+  position: relative;
+  user-select: none;
+}
+
+/* Groups of related segments, separated by dim `·` glyphs. */
+[data-sb] .sb-group { display: flex; align-items: center; gap: 10px; white-space: nowrap }
+[data-sb] .sb-group.end { margin-left: auto }
+[data-sb] .sb-sep { opacity: 0.35 }
+
+/* The strip itself breathes. One cycle = one thought; speed IS the state. */
+[data-sb][data-sb-state="work"] { animation: sb-breathe var(--sb-breath-work) var(--sb-ease-breath) infinite }
+[data-sb][data-sb-state="idle"] { animation: sb-breathe-idle var(--sb-breath-idle) var(--sb-ease-breath) infinite }
+
+/* Any text that should pulse with the breath — the status phrase, the glyph. */
+[data-sb] .sb-glow { animation: sb-glow var(--sb-breath-work) var(--sb-ease-breath) infinite }
+[data-sb] .sb-alert { animation: sb-alert 1.6s ease-in-out infinite }
+
+/* ---------------------------------------------------------- status phrase -- */
+
+/* Fixed 27ch slot: phrases rotate, the bar must never shuffle sideways. */
+[data-sb] .sb-status {
+  display: inline-block;
+  min-width: 27ch;
+  max-width: 27ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  font-size: var(--sb-fs-status);
+}
+/* Idle is quiet, not disabled. Below ~.8 opacity it reads as greyed-out UI. */
+[data-sb][data-sb-state="idle"] .sb-status {
+  opacity: 0.88;
+  font-style: italic;
+  font-weight: 500;
+  color: #eaf2fd;
+  text-shadow: 0 0 7px rgba(var(--sb-glow), 0.35);
+}
+/* Working text is the accent lifted toward white: a raw accent is unreadable
+   on dark palettes (#4d6bfe on #000 is a muddy navy). The first declaration is
+   the fallback; color-mix overrides it wherever supported. */
+[data-sb][data-sb-state="work"] .sb-status {
+  color: var(--sb-text);
+  color: color-mix(in srgb, var(--sb-accent) 42%, #ffffff);
+  font-weight: 600;
+}
+
+/* Claude-style glyph: always glowing, morphs while working. Fixed box width —
+   the glyph set has different advance widths and would shift the whole bar. */
+[data-sb] .sb-flower {
+  display: inline-block;
+  width: 1.2em;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--sb-accent);
+  animation: sb-glow var(--sb-breath-work) var(--sb-ease-breath) infinite;
+}
+[data-sb] .sb-flower.idle {
+  animation: sb-glow-soft var(--sb-breath-idle) var(--sb-ease-breath) infinite;
+}
+
+/* Soft ellipsis, or a hard block cursor for terminal skins. */
+[data-sb] .sb-dots i { display: inline-block; animation: sb-dotfade 1.2s ease-in-out infinite }
+[data-sb] .sb-dots i:nth-child(2) { animation-delay: 0.18s }
+[data-sb] .sb-dots i:nth-child(3) { animation-delay: 0.36s }
+[data-sb] .sb-cursor { display: inline-block; margin-left: 2px; animation: sb-blink 1.05s steps(1) infinite }
+
+/* Sleeping Zzzz: one lazy puff per breath, drifting up and out. */
+[data-sb] .sb-zzz {
+  display: inline-block;
+  margin-left: 6px;
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--sb-accent);
+  vertical-align: 1px;
+}
+[data-sb] .sb-zzz i { display: inline-block; font-style: normal; animation: sb-zz var(--sb-breath-idle) ease-out infinite }
+[data-sb] .sb-zzz i:nth-child(2) { animation-delay: 0.55s }
+[data-sb] .sb-zzz i:nth-child(3) { animation-delay: 1.1s }
+[data-sb] .sb-zzz i:nth-child(4) { animation-delay: 1.65s }
+
+[data-sb] .sb-queue { margin-left: 6px; color: #ffc400; font-size: 11px; font-weight: 700; text-shadow: none }
+
+/* ------------------------------------------------------- token pipeline -- */
+
+/* 8 beads, two lanes, left → right. Duration encodes tok/s; nothing else does. */
+[data-sb] .sb-flow {
+  position: relative;
+  display: inline-block;
+  width: var(--sb-flow-w);
+  height: var(--sb-flow-h);
+  overflow: hidden;
+  vertical-align: middle;
+}
+[data-sb] .sb-flow i {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f8fafc;
+  box-shadow: 0 0 10px rgba(var(--sb-glow), 1), 0 0 3px rgba(255, 255, 255, 0.95);
+  animation: sb-flow var(--sb-flow-dur) linear infinite;
+}
+[data-sb] .sb-flow i:nth-child(2) { animation-delay: calc(var(--sb-flow-dur) * -0.125) }
+[data-sb] .sb-flow i:nth-child(3) { animation-delay: calc(var(--sb-flow-dur) * -0.25) }
+[data-sb] .sb-flow i:nth-child(4) { animation-delay: calc(var(--sb-flow-dur) * -0.375) }
+[data-sb] .sb-flow i:nth-child(5) { animation-delay: calc(var(--sb-flow-dur) * -0.5) }
+[data-sb] .sb-flow i:nth-child(6) { animation-delay: calc(var(--sb-flow-dur) * -0.625) }
+[data-sb] .sb-flow i:nth-child(7) { animation-delay: calc(var(--sb-flow-dur) * -0.75) }
+[data-sb] .sb-flow i:nth-child(8) { animation-delay: calc(var(--sb-flow-dur) * -0.875) }
+[data-sb] .sb-flow i:nth-child(even) {
+  top: 10px;
+  width: 5px;
+  height: 5px;
+  background: var(--sb-accent2);
+  box-shadow: 0 0 9px rgba(var(--sb-glow), 0.95);
+}
+[data-sb] .sb-flow.idle i { background: #64748b; box-shadow: none }
+
+/* Factory mode: bits get pinched down and machined through a spinning gear. */
+[data-sb] .sb-flow.tool i {
+  background: #ffe066;
+  box-shadow: 0 0 10px rgba(255, 196, 0, 0.95);
+  animation-name: sb-flow-factory;
+}
+[data-sb] .sb-flow.tool i:nth-child(even) { background: #ffc400; box-shadow: 0 0 9px rgba(255, 196, 0, 0.9) }
+[data-sb] .sb-flow-gear {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  line-height: 12px;
+  text-align: center;
+  font-size: 11px;
+  color: #ffc400;
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 0 8px rgba(255, 196, 0, 0.9);
+  transition: opacity 0.18s ease;
+}
+[data-sb] .sb-flow.tool .sb-flow-gear { opacity: 1; animation: sb-spin 1.6s linear infinite }
+
+/* ------------------------------------------------------------- meters ---- */
+
+/* Cache hit rate as block glyphs: zero subpixel blur, monospace-safe. */
+[data-sb] .sb-blocks { display: inline-block; font-size: var(--sb-fs-meta); line-height: 1; letter-spacing: 1px; vertical-align: middle }
+[data-sb] .sb-blocks .on { color: inherit; text-shadow: 0 0 7px currentColor }
+[data-sb] .sb-blocks .off { opacity: 0.25 }
+[data-sb] .sb-num { font-variant-numeric: tabular-nums }
+
+[data-sb] .sb-flash { animation: sb-flash 0.9s ease-out 1 }
+[data-sb] .sb-bump {
+  position: absolute;
+  left: 100%;
+  top: -3px;
+  margin-left: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #00e676;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: sb-bump 1.2s ease-out forwards;
+}
+[data-sb] .sb-loading { animation: sb-loading 1.3s ease-in-out infinite }
+
+/* ---------------------------------------------------------------- splash -- */
+
+/* Two crests enter from the ends, converge on the click, swell at contact,
+   then bounce home. --sb-x = meeting point in px, --sb-w = bar width in px.
+   Defaults keep the wave sane if a host forgets to measure. */
+[data-sb] .sb-splash { position: absolute; inset: 0; pointer-events: none; overflow: hidden; display: none; --sb-x: 50vw; --sb-w: 100vw }
+[data-sb] .sb-splash.go { display: block }
+[data-sb] .sb-splash i {
+  position: absolute;
+  left: var(--sb-sx, 13%);
+  top: 50%;
+  width: 200px;
+  height: 200px;
+  margin: -100px 0 0 -100px;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(var(--sb-glow), 0.6) 0%, rgba(var(--sb-glow), 0.18) 45%, transparent 72%);
+}
+[data-sb] .sb-splash b,
+[data-sb] .sb-splash u {
+  position: absolute;
+  top: -40%;
+  width: 220px;
+  height: 180%;
+  margin-left: -110px;                        /* centres land exactly on the target */
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, rgba(var(--sb-glow), 0.5) 0%, rgba(var(--sb-glow), 0.16) 45%, transparent 72%);
+}
+[data-sb] .sb-splash b { left: 0 }            /* left crest travels right */
+[data-sb] .sb-splash u { left: 100% }         /* right crest travels left */
+[data-sb] .sb-splash.go i { animation: sb-impact 0.55s ease-out 0.4s forwards }
+[data-sb] .sb-splash.go b { animation: sb-wave-in-r 1.2s cubic-bezier(0.3, 0.6, 0.35, 1) forwards }
+[data-sb] .sb-splash.go u { animation: sb-wave-in-l 1.2s cubic-bezier(0.3, 0.6, 0.35, 1) forwards }
+
+/* Incoming-event flash: one-shot inset glow over the whole strip. */
+[data-sb] .sb-ping { position: absolute; inset: 0; pointer-events: none; border-radius: inherit; animation: sb-ping 0.55s ease-out 1 }
+
+/* ---------------------------------------------------------- ocean / VT ---- */
+
+/* Whale is driving: flat wash + a single glint sweeping the top edge. */
+[data-sb][data-sb-ocean] {
+  background: var(--sb-wash);
+  border-top: 1px solid var(--sb-accent);
+  box-shadow: inset 0 0 30px rgba(var(--sb-glow), 0.14);
+}
+[data-sb][data-sb-ocean]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  pointer-events: none;
+  opacity: 0.75;
+  background: linear-gradient(90deg, transparent 0%, rgba(var(--sb-glow), 0.75) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: sb-wave 7s linear infinite;
+}
+[data-sb][data-sb-ocean] .sb-flow.idle i { background: #475569; box-shadow: none }
+
+/* Hover: lean in a touch; the card reveals the numbers the bar truncates. */
+[data-sb][data-sb-hover] { filter: brightness(1.08) }
+
+/* Scanline skin: faint CRT raster over everything, above the content. */
+[data-sb][data-sb-scan]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.16;
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0 1px, transparent 1px 3px);
+}
+
+/* ---------------------------------------------------------------- card ---- */
+
+/* Anchored bottom-left of the bar. Never follows the pointer. 300px wide. */
+[data-sb] .sb-card {
+  position: absolute;
+  left: 12px;
+  bottom: calc(100% + 8px);
+  z-index: 50;
+  width: 300px;
+  max-width: calc(100vw - 28px);
+  padding: 8px 11px;
+  border-radius: 10px;
+  pointer-events: auto;
+  font-size: 11px;
+  line-height: 1.6;
+  background: #000000;
+  border: 1px solid rgba(var(--sb-glow), 0.22);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.95);
+  animation: sb-card-in 0.16s ease-out 1;
+}
+[data-sb] .sb-card::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-top-color: rgba(var(--sb-glow), 0.22);
+}
+[data-sb] .sb-card.pinned { border-color: rgba(var(--sb-glow), 0.45) }
+
+[data-sb] .sb-row { display: flex; justify-content: space-between; gap: 16px; white-space: nowrap }
+[data-sb] .sb-k { color: rgba(150, 170, 190, 0.9) }
+[data-sb] .sb-v { color: #ffffff; font-variant-numeric: tabular-nums }
+
+[data-sb] .sb-spark { display: block; width: 100%; height: 26px; margin-top: 5px }
+[data-sb] .sb-spark polyline {
+  fill: none;
+  stroke: var(--sb-accent);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 3px rgba(var(--sb-glow), 0.85));
+}
+[data-sb] .sb-spark-base { stroke: rgba(255, 255, 255, 0.1); stroke-width: 1 }
+
+[data-sb] .sb-palette {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  pointer-events: auto;
+}
+[data-sb] .sb-swatch {
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.15s ease;
+}
+[data-sb] .sb-swatch:hover { transform: scale(1.18) }
+[data-sb] .sb-swatch.on { border: 2px solid #ffffff }
+
+[data-sb] .sb-tools { display: flex; align-items: center; gap: 5px; margin-top: 7px; pointer-events: auto }
+[data-sb] .sb-tool-k { font-size: 9.5px; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(150, 170, 190, 0.85) }
+[data-sb] .sb-tool-v { min-width: 26px; text-align: center; font-size: 10px; color: #fff; font-variant-numeric: tabular-nums }
+[data-sb] .sb-mini {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  line-height: 1;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+  color: #cfd9e6;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+[data-sb] .sb-mini:hover { border-color: rgba(var(--sb-glow), 0.65); color: #fff }
+[data-sb] .sb-fx {
+  margin-left: auto;
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+  color: #cfd9e6;
+  font: inherit;
+  font-size: 9.5px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+[data-sb] .sb-fx:hover { border-color: rgba(var(--sb-glow), 0.65); color: #fff }
+
+/* ------------------------------------------------------------- lite mode -- */
+
+/* FX off. Kills every full-surface repaint, keeps small motion. State stays
+   identical — lite is a rendering budget, never a different information set. */
+[data-sb][data-sb-lite] { box-shadow: none !important; animation: none !important }
+[data-sb][data-sb-lite][data-sb-hover] { filter: none }
+[data-sb][data-sb-lite] .sb-ping { display: none }
+[data-sb][data-sb-lite] .sb-splash { display: none !important }
+[data-sb][data-sb-lite] .sb-spark polyline { filter: none }
+/* Freeze the breath but keep a static halo — lite must not mean dim text. */
+[data-sb][data-sb-lite] .sb-glow {
+  animation: none !important;
+  text-shadow: 0 0 8px rgba(var(--sb-glow), 0.6);
+}
+[data-sb][data-sb-lite] .sb-card,
+[data-sb][data-sb-lite] .sb-swatch { transition: none }
+
+/* ----------------------------------------------------------- keyframes --- */
+
+/* Asymmetric on purpose: inhale at 0–38%, short hold to 46%, slow exhale out.
+   A symmetric sine reads as a machine pulsing; this reads as breathing. */
+@keyframes sb-breathe {
+  0%   { box-shadow: inset 0 0 26px rgba(var(--sb-glow), 0.30), 0 0 12px rgba(var(--sb-glow), 0.12) }
+  38%  { box-shadow: inset 0 0 62px rgba(var(--sb-glow), 0.70), 0 0 26px rgba(var(--sb-glow), 0.35) }
+  46%  { box-shadow: inset 0 0 56px rgba(var(--sb-glow), 0.62), 0 0 23px rgba(var(--sb-glow), 0.31) }
+  100% { box-shadow: inset 0 0 26px rgba(var(--sb-glow), 0.30), 0 0 12px rgba(var(--sb-glow), 0.12) }
+}
+@keyframes sb-breathe-idle {
+  0%   { box-shadow: inset 0 0 20px rgba(var(--sb-glow), 0.14), 0 0 8px rgba(var(--sb-glow), 0.05) }
+  38%  { box-shadow: inset 0 0 46px rgba(var(--sb-glow), 0.38), 0 0 16px rgba(var(--sb-glow), 0.16) }
+  46%  { box-shadow: inset 0 0 41px rgba(var(--sb-glow), 0.33), 0 0 14px rgba(var(--sb-glow), 0.13) }
+  100% { box-shadow: inset 0 0 20px rgba(var(--sb-glow), 0.14), 0 0 8px rgba(var(--sb-glow), 0.05) }
+}
+@keyframes sb-glow {
+  0%   { text-shadow: 0 0 6px rgba(var(--sb-glow), 0.40) }
+  38%  { text-shadow: 0 0 14px rgba(var(--sb-glow), 0.95) }
+  46%  { text-shadow: 0 0 12px rgba(var(--sb-glow), 0.85) }
+  100% { text-shadow: 0 0 6px rgba(var(--sb-glow), 0.40) }
+}
+@keyframes sb-glow-soft {
+  0%   { text-shadow: 0 0 4px rgba(var(--sb-glow), 0.45) }
+  38%  { text-shadow: 0 0 9px rgba(var(--sb-glow), 0.85) }
+  46%  { text-shadow: 0 0 8px rgba(var(--sb-glow), 0.75) }
+  100% { text-shadow: 0 0 4px rgba(var(--sb-glow), 0.45) }
+}
+@keyframes sb-alert {
+  0%, 100% { text-shadow: 0 0 6px rgba(255, 23, 68, 0.35) }
+  50%      { text-shadow: 0 0 14px rgba(255, 23, 68, 0.95) }
+}
+@keyframes sb-dotfade { 0%, 100% { opacity: 0.2 } 50% { opacity: 1 } }
+@keyframes sb-blink { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
+@keyframes sb-zz {
+  0%   { opacity: 0; transform: translate(0, 2px) scale(0.7) }
+  28%  { opacity: 0.9 }
+  100% { opacity: 0; transform: translate(4px, -9px) scale(1.2) }
+}
+@keyframes sb-flow {
+  0%   { opacity: 0; transform: translateX(0) }
+  12%  { opacity: 1 }
+  88%  { opacity: 1 }
+  100% { opacity: 0; transform: translateX(128px) }
+}
+/* Pinch to 34% through the middle, where the gear sits. */
+@keyframes sb-flow-factory {
+  0%   { opacity: 0;    transform: translateX(0)   scale(0.7) }
+  12%  { opacity: 1;    transform: translateX(16px) scale(1) }
+  44%  { opacity: 0.55; transform: translateX(55px) scale(0.34) }
+  56%  { opacity: 0.55; transform: translateX(73px) scale(0.34) }
+  88%  { opacity: 1;    transform: translateX(112px) scale(1) }
+  100% { opacity: 0;    transform: translateX(128px) scale(0.7) }
+}
+@keyframes sb-wave { 0% { background-position: -160% 0 } 100% { background-position: 160% 0 } }
+@keyframes sb-ping {
+  0%   { box-shadow: inset 0 0 0 rgba(var(--sb-glow), 0); opacity: 1 }
+  20%  { box-shadow: inset 0 0 70px rgba(var(--sb-glow), 0.85) }
+  100% { box-shadow: inset 0 0 0 rgba(var(--sb-glow), 0); opacity: 0 }
+}
+@keyframes sb-impact {
+  0%   { transform: scale(0.2); opacity: 0 }
+  30%  { transform: scale(1.1); opacity: 1 }
+  100% { transform: scale(2.6); opacity: 0 }
+}
+/* 45% → 55% hold is the collision: they swell at contact instead of passing
+   through each other, then rebound. Don't collapse that hold. */
+@keyframes sb-wave-in-r {
+  0%   { transform: translateX(0) scaleX(0.55); opacity: 0 }
+  12%  { opacity: 0.9 }
+  45%  { transform: translateX(var(--sb-x)) scaleX(1.15); opacity: 1 }
+  55%  { transform: translateX(var(--sb-x)) scaleX(1.4); opacity: 1 }
+  100% { transform: translateX(0) scaleX(0.55); opacity: 0 }
+}
+@keyframes sb-wave-in-l {
+  0%   { transform: translateX(0) scaleX(0.55); opacity: 0 }
+  12%  { opacity: 0.9 }
+  45%  { transform: translateX(calc(var(--sb-x) - var(--sb-w))) scaleX(1.15); opacity: 1 }
+  55%  { transform: translateX(calc(var(--sb-x) - var(--sb-w))) scaleX(1.4); opacity: 1 }
+  100% { transform: translateX(0) scaleX(0.55); opacity: 0 }
+}
+@keyframes sb-flash {
+  0%   { filter: none }
+  25%  { filter: brightness(1.9) drop-shadow(0 0 6px currentColor) }
+  100% { filter: none }
+}
+@keyframes sb-bump {
+  0%   { opacity: 1; transform: translateY(0) }
+  60%  { opacity: 1; transform: translateY(-7px) }
+  100% { opacity: 0; transform: translateY(-12px) }
+}
+@keyframes sb-loading { 0%, 100% { opacity: 0.35 } 50% { opacity: 0.95 } }
+@keyframes sb-spin { to { transform: rotate(360deg) } }
+@keyframes sb-card-in { from { opacity: 0 } to { opacity: 1 } }
+
+/* ------------------------------------------------------------- palettes -- */
+
+/* 12 presets. Add one by copying four lines — every glow in the file follows. */
+
+[data-sb][data-sb-theme="cyan"]      { --sb-accent:#00e5ff; --sb-accent2:#5ad8ff; --sb-glow:0,229,255;   --sb-wash:#04161b }
+[data-sb][data-sb-theme="green"]     { --sb-accent:#00e676; --sb-accent2:#57e39a; --sb-glow:0,230,118;   --sb-wash:#04160c }
+[data-sb][data-sb-theme="matrix"]    { --sb-accent:#00ff6a; --sb-accent2:#0aff9d; --sb-glow:0,255,106;   --sb-wash:#02120a }
+[data-sb][data-sb-theme="magenta"]   { --sb-accent:#ff2d95; --sb-accent2:#ff7ab8; --sb-glow:255,45,149;  --sb-wash:#170510 }
+[data-sb][data-sb-theme="violet"]    { --sb-accent:#b026ff; --sb-accent2:#c777ff; --sb-glow:176,38,255;  --sb-wash:#100518 }
+[data-sb][data-sb-theme="amber"]     { --sb-accent:#ffb300; --sb-accent2:#ffcf66; --sb-glow:255,179,0;   --sb-wash:#150f03 }
+[data-sb][data-sb-theme="ice"]       { --sb-accent:#8ad8ff; --sb-accent2:#c7ecff; --sb-glow:138,216,255; --sb-wash:#05111a }
+[data-sb][data-sb-theme="blood"]     { --sb-accent:#ff1744; --sb-accent2:#ff6b86; --sb-glow:255,23,68;   --sb-wash:#150306 }
+[data-sb][data-sb-theme="cyberpunk"] { --sb-accent:#fcee0a; --sb-accent2:#ff2d95; --sb-glow:252,238,10;  --sb-wash:#14120a }
+[data-sb][data-sb-theme="cyberwar"]  { --sb-accent:#ff2b2b; --sb-accent2:#39ff14; --sb-glow:255,43,43;   --sb-wash:#140606 }
+[data-sb][data-sb-theme="superblack"]{ --sb-accent:#ffffff; --sb-accent2:#9aa4b2; --sb-glow:255,255,255; --sb-wash:#000000 }
+[data-sb][data-sb-theme="deepseek"]  { --sb-accent:#4d6bfe; --sb-accent2:#679efe; --sb-glow:77,107,254;  --sb-wash:#0b1226 }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Host may also expose this as data-sb-lite. Both are wiring, not policy. */
+  [data-sb] { animation: none }
+}

@@ -194,11 +194,23 @@ the bundle with `require()`.
 - **No layout animation.** Everything is `transform` / `opacity` / `box-shadow` / `text-shadow`.
 - **Stable DOM.** Animated elements are created once and updated reactively; nothing is rebuilt on a
   timer.
-- **Themed by variables.** Three CSS custom properties (`--sb-glow`, `--sb-accent`, `--sb-accent2`)
-  drive every glow, particle and hairline.
+- **Themed by variables.** Four CSS custom properties (`--sb-glow`, `--sb-accent`, `--sb-accent2`,
+  `--sb-wash`) drive every glow, particle, hairline and tint.
 
 Text is never reflowed by phrase changes: the status slot is a fixed-width box, and the spinner glyph
 lives in a fixed-width box (its glyph set has varying advance widths).
+
+### Rebuilding the look elsewhere
+
+The visual system is documented independently of the Solid component, so it can be ported to another
+host (web app, Electron panel, TUI):
+
+| File | What it is |
+|---|---|
+| [`docs/STYLE.md`](docs/STYLE.md) | the full spec: tokens, anatomy, states, motion timings, splash geometry, lite-mode contract, porting checklist, and the traps we already hit |
+| [`docs/statusbar.css`](docs/statusbar.css) | the same design as a framework-agnostic, attribute-driven stylesheet — no build step |
+| [`docs/themes.json`](docs/themes.json) | palettes, rhythm, semantic colors and derived formulas in machine-readable form |
+| [`docs/demo.html`](docs/demo.html) | live playground to check a port: theme picker, state toggles, FX off, click-to-splash |
 
 ---
 

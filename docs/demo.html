@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Status bar — style playground</title>
+<link rel="stylesheet" href="statusbar.css" />
+<style>
+  html, body { margin: 0; height: 100%; background: #080a0c; color: #cfd9e6;
+               font: 12px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif }
+  .wrap { display: flex; flex-direction: column; height: 100% }
+  .filler { flex: 1; display: grid; place-items: center; color: #41505f; letter-spacing: .3px }
+  .hud { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px;
+         border-bottom: 1px solid rgba(255,255,255,.06); font-size: 11px }
+  .hud label { display: flex; align-items: center; gap: 5px; cursor: pointer }
+  .hud select, .hud button { font: inherit; font-size: 11px; color: #cfd9e6; background: #0f1418;
+                             border: 1px solid rgba(255,255,255,.14); border-radius: 5px; padding: 3px 6px }
+  .hud button:hover { border-color: rgba(255,255,255,.35); color: #fff }
+  .hud .spacer { flex: 1 }
+  .hud .v { color: #6b7c8f; }
+  b { font-weight: 600 }
+  .dim { opacity: .75 }
+  .dim2 { opacity: .65; font-size: 11px }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hud">
+    <b style="color:#8ad8ff">statusbar.css playground</b>
+    <span class="v">— click the strip to fire the wave</span>
+    <span class="spacer"></span>
+    <label>theme <select id="theme"></select></label>
+    <label><input type="checkbox" id="state" checked /> working</label>
+    <label><input type="checkbox" id="tool" /> tool</label>
+    <label><input type="checkbox" id="ocean" /> ocean</label>
+    <label><input type="checkbox" id="scan" /> scan</label>
+    <label><input type="checkbox" id="lite" /> FX off</label>
+    <button id="tps">tps +55</button>
+  </div>
+
+  <div class="filler">the harness renders here — the bar lives at the bottom</div>
+
+  <!-- ===================== the bar ===================== -->
+  <div id="bar" data-sb data-sb-state="work">
+    <div class="sb-group">
+      <span class="dim" style="cursor:help" title="agent: build — hover for session details">⚙️ build</span>
+      <span class="sb-sep">·</span>
+      <span class="dim" title="working tree">⎇ main ●2</span>
+    </div>
+
+    <div class="sb-group">
+      <span style="font-weight:600;opacity:.9">
+        <span class="sb-flower" id="glyph" style="margin-right:5px">✻</span>
+        <span id="modelIcon">🤖</span> <span id="modelName">deepseek/deepseek-flash</span>
+      </span>
+      <span class="sb-sep">·</span>
+      <span id="status" class="sb-status sb-glow">✦ Cogitating like crazy<span class="sb-dots"><i>.</i><i>.</i><i>.</i></span></span>
+      <span class="sb-sep">·</span>
+      <span class="sb-flow" id="flow" title="55 tok/s flowing">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <span class="sb-flow-gear" aria-hidden="true">⚙</span>
+      </span>
+    </div>
+
+    <div class="sb-group end">
+      <span class="sb-num" style="display:flex;align-items:center;gap:6px;color:#00e676;font-weight:600"
+            title="cache read share of prompt tokens — 86.2%">
+        ⚡ 86% <span class="sb-blocks"><span class="on">▰▰▰▰</span><span class="off">▱</span></span>
+      </span>
+      <span class="sb-sep">·</span>
+      <span style="opacity:.8" title="saved versus paying full input price">💚 −$0.31</span>
+      <span class="sb-sep">·</span>
+      <span style="opacity:.85" title="42.0k / 100k tokens in context">🪟 42% ctx</span>
+      <span class="sb-sep">·</span>
+      <span style="opacity:.8" title="session cost">💰 $0.04</span>
+      <span class="sb-sep">·</span>
+      <span style="opacity:.8;position:relative" title="throughput tokens">📦 42.1k tok</span>
+      <span class="sb-sep">·</span>
+      <span class="sb-num dim2" title="↑ input · ↓ output · ✍️ cache write · 🧠 reasoning">↑3.1k ↓820 ✍️1.2k 🧠400</span>
+      <span class="sb-sep">·</span>
+      <span style="opacity:.7" title="session duration">⏱ 4m</span>
+    </div>
+
+    <span class="sb-splash" id="splash" aria-hidden="true"><i></i><b></b><u></u></span>
+  </div>
+</div>
+
+<script>
+  const THEMES = ["cyan","green","matrix","magenta","violet","amber","ice","blood","cyberpunk","cyberwar","superblack","deepseek"];
+  const GLYPHS = ["✻","✽","✶","✳","✢","·"];
+  const WORDS  = ["thinking super hard","Cogitating like crazy","reticulating splines","herding semicolons",
+                  "consulting the rubber duck","marinating in context","assembling thought particles"];
+  const IDLE   = ["waiting to cogitate","in the ether","dozing in latent space"];
+
+  const bar = document.getElementById("bar");
+  const stateBox = document.getElementById("state");
+  const toolBox = document.getElementById("tool");
+  const splash = document.getElementById("splash");
+  const statusEl = document.getElementById("status");
+  const flow = document.getElementById("flow");
+  const glyph = document.getElementById("glyph");
+
+  const sel = document.getElementById("theme");
+  for (const t of THEMES) sel.add(new Option(t, t));
+  sel.value = "cyan";
+
+  sel.onchange = () => bar.setAttribute("data-sb-theme", sel.value);
+
+  const syncAttr = (box, attr) => {
+    box.onchange = () => box.checked ? bar.setAttribute(attr, "") : bar.removeAttribute(attr);
+  };
+  syncAttr(document.getElementById("ocean"), "data-sb-ocean");
+  syncAttr(document.getElementById("scan"), "data-sb-scan");
+  syncAttr(document.getElementById("lite"), "data-sb-lite");
+
+  document.getElementById("theme").dispatchEvent(new Event("change"));
+
+  // ---- state -------------------------------------------------------------
+  let tps = 55;
+  const render = () => {
+    const working = stateBox.checked;
+    bar.setAttribute("data-sb-state", working ? "work" : "idle");
+    statusEl.classList.toggle("sb-glow", working);
+    statusEl.style.color = working ? "" : "";
+    document.getElementById("modelIcon").textContent =
+      sel.value === "deepseek" ? "🐋" : "🤖";
+
+    flow.classList.toggle("tool", toolBox.checked);
+    flow.classList.toggle("idle", !working);
+    // load-bearing formula: 3.2 / (1 + tps/55), clamped
+    const dur = !working ? 10 : Math.max(0.5, Math.min(3.2, 3.2 / (1 + tps / 55)));
+    flow.style.setProperty("--sb-flow-dur", dur.toFixed(2) + "s");
+  };
+  stateBox.onchange = render;
+  toolBox.onchange = render;
+  document.getElementById("tps").onclick = () => { tps = tps >= 220 ? 0 : tps + 55; render(); };
+
+  // ---- phrase + glyph rotation on the breath ----------------------------
+  let wi = 0, gi = 0, idle = false;
+  const rotate = () => {
+    const working = stateBox.checked;
+    const list = working ? WORDS : IDLE;
+    const dur = working ? 3.75 : 5;
+
+    if (!working && !idle) {
+      idle = true;
+      statusEl.className = "sb-status idle";
+      statusEl.innerHTML = `◌ ${list[0]}<span class="sb-zzz" aria-hidden="true"><i>Z</i><i>z</i><i>z</i><i>z</i></span>`;
+    } else if (working && idle) {
+      idle = false;
+      statusEl.className = "sb-status sb-glow";
+      statusEl.innerHTML = `✦ ${list[0]}<span class="sb-dots"><i>.</i><i>.</i><i>.</i></span>`;
+    } else {
+      wi = (wi + 1) % list.length;
+      const dots = working ? `<span class="sb-dots"><i>.</i><i>.</i><i>.</i></span>`
+                           : `<span class="sb-zzz" aria-hidden="true"><i>Z</i><i>z</i><i>z</i><i>z</i></span>`;
+      statusEl.innerHTML = `${working ? "✦" : "◌"} ${list[wi]}${dots}`;
+    }
+    gi = (gi + 1) % GLYPHS.length;
+    glyph.textContent = GLYPHS[gi];
+    setTimeout(rotate, dur * 1000);
+  };
+  setTimeout(rotate, 3750);
+
+  // ---- splash: class flip + reflow, never a remount ---------------------
+  bar.addEventListener("click", (e) => {
+    if (bar.hasAttribute("data-sb-lite")) return;
+    if (e.target.closest(".sb-card")) return;
+    const r = bar.getBoundingClientRect();
+    const pct = Math.max(2, Math.min(98, ((e.clientX - r.left) / r.width) * 100));
+    splash.style.setProperty("--sb-sx", pct + "%");
+    splash.style.setProperty("--sb-x", (pct / 100) * r.width + "px");
+    splash.style.setProperty("--sb-w", r.width + "px");
+    splash.classList.remove("go");
+    void splash.offsetWidth;
+    splash.classList.add("go");
+  });
+
+  render();
+</script>
+</body>
+</html>

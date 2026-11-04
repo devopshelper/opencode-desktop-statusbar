@@ -453,13 +453,6 @@ const css = `
 /* Incoming-event flash: one-shot overlay, restarted on every key change. */
 .sb-ping { position:absolute; inset:0; pointer-events:none; border-radius:inherit; animation:sb-ping .55s ease-out 1 }
 
-/* Splash: burst + ring expanding from the clicked model name (or turn start). */
-.sb-splash { position:absolute; inset:0; pointer-events:none; overflow:hidden; display:none }
-.sb-splash.go { display:block }
-.sb-splash i { position:absolute; left:var(--sb-sx, 13%); top:50%; width:200px; height:200px; margin:-100px 0 0 -100px; border-radius:50%; background:radial-gradient(circle, rgba(var(--sb-glow),.55) 0%, rgba(var(--sb-glow),.16) 45%, transparent 72%) }
-.sb-splash b { position:absolute; left:var(--sb-sx, 13%); top:50%; width:100px; height:10px; margin:-5px 0 0 -50px; border-radius:50%; border:1px solid rgba(var(--sb-glow),.75) }
-.sb-splash.go i { animation:sb-splash .8s cubic-bezier(.2,.7,.2,1) forwards }
-.sb-splash.go b { animation:sb-ring 1.05s ease-out forwards }
 /* Splash: two waves converge from the bar's ends, collide at the point you
    clicked, flash, then bounce back out. Geometry arrives as px custom props. */
 .sb-splash { position:absolute; inset:0; pointer-events:none; overflow:hidden; display:none }

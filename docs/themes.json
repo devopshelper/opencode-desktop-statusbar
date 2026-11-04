@@ -1,0 +1,180 @@
+{
+  "$comment": "Design tokens for the OpenCode desktop status bar. Machine-readable mirror of docs/statusbar.css and src/gui.tsx. glow is an RGB triple with no rgb() wrapper so it can be spliced into rgba(var(--sb-glow), a).",
+  "version": 1,
+  "rhythm": {
+    "breathWorkSeconds": 3.75,
+    "breathIdleSeconds": 5,
+    "easeBreath": "cubic-bezier(0.37, 0, 0.63, 1)",
+    "inhaleStop": 0.38,
+    "holdStop": 0.46,
+    "wordRotationMs": 3750,
+    "idleWordRotationMs": 10000,
+    "eventPollMs": 1000,
+    "safetyPollMs": 15000,
+    "tpsStaleMs": 3500,
+    "cardCloseMs": 140,
+    "cardInMs": 160,
+    "splashMs": 1200,
+    "splashImpactDelayMs": 400,
+    "pingMs": 550
+  },
+  "type": {
+    "base": "12px",
+    "statusPhrase": "12.5px",
+    "meta": "11px",
+    "blocks": "11px",
+    "bump": "10px",
+    "zzz": "10px",
+    "letterSpacing": "0.3px",
+    "statusSlotCh": 27,
+    "family": "inherit"
+  },
+  "layout": {
+    "columnGap": "18px",
+    "rowGap": "3px",
+    "padX": 16,
+    "padY": { "min": 2, "max": 18, "default": 6, "step": 2 },
+    "separator": "·",
+    "separatorOpacity": 0.35,
+    "statusFont": "#f2f7ff",
+    "idleStatusColor": "#eaf2fd",
+    "idleStatusOpacity": 0.88,
+    "card": {
+      "width": 300,
+      "offsetX": 12,
+      "offsetY": 8,
+      "borderRadius": 10,
+      "background": "#000000",
+      "fontSize": "11px",
+      "lineHeight": 1.6
+    }
+  },
+  "semantics": {
+    "$comment": "Fixed functional colors. They do NOT follow the theme — a warning must stay a warning.",
+    "cacheExcellent": { "atLeastPct": 80, "color": "#00e676" },
+    "cacheGood": { "atLeastPct": 40, "color": "#00e5ff" },
+    "cacheWarn": { "atLeastPct": 15, "color": "#ffc400" },
+    "cacheBad": { "color": "#ff1744" },
+    "ctxWarn": { "atLeastPct": 75, "color": "#ffc400" },
+    "ctxCritical": { "atLeastPct": 90, "color": "#ff1744" },
+    "savings": "#00e676",
+    "queue": "#ffc400",
+    "factoryBit": "#ffe066",
+    "factoryBitAlt": "#ffc400",
+    "idleBit": "#64748b",
+    "fishBit": "#475569",
+    "barBlack": "#000000",
+    "cardText": "#ffffff",
+    "cardLabel": "rgba(150,170,190,0.9)"
+  },
+  "themes": [
+    { "id": "cyan", "name": "amoled cyan", "accent": "#00e5ff", "accent2": "#5ad8ff", "glow": "0,229,255", "wash": "#04161b" },
+    { "id": "green", "name": "matrix", "accent": "#00e676", "accent2": "#57e39a", "glow": "0,230,118", "wash": "#04160c" },
+    {
+      "id": "matrixgreen",
+      "name": "matrix · hacker",
+      "accent": "#00ff6a",
+      "accent2": "#0aff9d",
+      "glow": "0,255,106",
+      "wash": "#02120a",
+      "skin": {
+        "scan": true,
+        "cursor": true,
+        "glyphs": ["ア", "イ", "ウ", "エ", "オ", "・"],
+        "words": ["decrypting the stream", "reading the source", "following the white rabbit", "compiling the truth", "tracing the packet"],
+        "idleWords": ["green on black", "awaiting the signal", "jack out pending"]
+      }
+    },
+    { "id": "magenta", "name": "neon pink", "accent": "#ff2d95", "accent2": "#ff7ab8", "glow": "255,45,149", "wash": "#170510" },
+    { "id": "violet", "name": "ultraviolet", "accent": "#b026ff", "accent2": "#c777ff", "glow": "176,38,255", "wash": "#100518" },
+    { "id": "amber", "name": "solar", "accent": "#ffb300", "accent2": "#ffcf66", "glow": "255,179,0", "wash": "#150f03" },
+    { "id": "ice", "name": "ice", "accent": "#8ad8ff", "accent2": "#c7ecff", "glow": "138,216,255", "wash": "#05111a" },
+    { "id": "blood", "name": "blood", "accent": "#ff1744", "accent2": "#ff6b86", "glow": "255,23,68", "wash": "#150306" },
+    {
+      "id": "cyberpunk",
+      "name": "cyberpunk",
+      "accent": "#fcee0a",
+      "accent2": "#ff2d95",
+      "glow": "252,238,10",
+      "wash": "#14120a",
+      "skin": {
+        "scan": true,
+        "cursor": true,
+        "glyphs": ["◈", "◇", "◆", "◉", "◊", "·"],
+        "words": ["jacking in", "breaching the ICE", "flatlining the net", "derezzing the mainframe", "ghosting through firewalls", "running the deck"],
+        "idleWords": ["chrome cooling down", "idle in the sprawl", "waiting on the grid"]
+      }
+    },
+    {
+      "id": "cyberwar",
+      "name": "cyberwar",
+      "accent": "#ff2b2b",
+      "accent2": "#39ff14",
+      "glow": "255,43,43",
+      "wash": "#140606",
+      "skin": {
+        "scan": true,
+        "cursor": true,
+        "glyphs": ["◤", "◥", "◣", "◢", "▮"],
+        "words": ["escalating", "deploying payload", "rooting the target", "exfiltrating", "burning the traces", "holding the line"],
+        "idleWords": ["armed and waiting", "listening on the wire", "cold standby"]
+      }
+    },
+    { "id": "superblack", "name": "super black", "accent": "#ffffff", "accent2": "#9aa4b2", "glow": "255,255,255", "wash": "#000000" },
+    {
+      "id": "deepseek",
+      "name": "deepseek",
+      "accent": "#4d6bfe",
+      "accent2": "#679efe",
+      "glow": "77,107,254",
+      "wash": "#0b1226",
+      "source": "deepseek.com design tokens: --ds-rgb-primary, --dsw-static-deepseek-400, --dsw-static-deepseek-900"
+    }
+  ],
+  "defaultPhrases": {
+    "glyphs": ["✻", "✽", "✶", "✳", "✢", "·"],
+    "words": [
+      "thinking super hard",
+      "Cogitating like crazy",
+      "thinking even harder",
+      "crunching popcorns",
+      "thinking or not thinking",
+      "to be or not to be",
+      "reticulating splines",
+      "herding semicolons",
+      "untangling spaghetti",
+      "consulting the rubber duck",
+      "summoning the muses",
+      "shaking the idea tree",
+      "marinating in context",
+      "shuffling tokens like tarot",
+      "brewing something devious",
+      "polishing the brain gears",
+      "whispering to the GPU",
+      "staring into the abyss",
+      "assembling thought particles",
+      "doing philosophy in the dark"
+    ],
+    "idleWords": [
+      "waiting to cogitate",
+      "bmboozled",
+      "in the ether",
+      "idling at 0.2 Hz",
+      "resting the neurons",
+      "pending inspiration",
+      "off in a daydream",
+      "charging psychic batteries",
+      "dozing in latent space"
+    ]
+  },
+  "derived": {
+    "$comment": "Formulas the host must implement. Values are load-bearing, not taste.",
+    "flowDuration": "idle ? 10s : clamp(3.2 / (1 + tps / 55), 0.5, 3.2)s, divided by 1.6 while hovered (floor 0.35s)",
+    "flowStagger": "nth-child(i) delay = -dur * i/8",
+    "breathState": "busy ? 3.75s (work) : 5s (idle)",
+    "statusColorWork": "color-mix(in srgb, accent 42%, #ffffff), fallback #f2f7ff",
+    "cachePct": "cacheRead / (input + cacheRead + cacheWrite) * 100",
+    "cacheBlocks": "5 cells, filled = round(pct/100*5), glyphs ▰ ▱",
+    "splashGeometry": "--sb-x = clickPct/100 * barWidth px, --sb-w = barWidth px, clamp clickPct to 2..98"
+  }
+}
